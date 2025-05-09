@@ -85,18 +85,17 @@ class PayoutReport:
 
 
 class AvgRateReport(Report):
-
     def generate(self, employees: List[Employee]) -> Dict[str, Any]:
         departments = defaultdict(list)
         for emp in employees:
             departments[emp.department].append(emp)
 
         report = {}
-        for dept, emps in departments.items():
+        for department, emps in departments.items():
             total_rate = sum(emp.rate for emp in emps)
             avg_rate = total_rate / len(emps) if emps else 0
 
-            report[dept] = {
+            report[department] = {
                 "employee_count": len(emps),
                 "total_rate": total_rate,
                 "avg_rate": avg_rate,
@@ -119,12 +118,8 @@ class AvgRateReport(Report):
 class ReportGenerator:
     @staticmethod
     def check_csv_file(file_path: str) -> List[Dict[str, str]]:
-        if isinstance(file_path, str):
-            with open(file_path, 'r') as f:
-                lines = f.readlines()
-        else:
-            file_path.seek(0)
-            lines = file_path.readlines()
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
 
         if not lines:
             return []
